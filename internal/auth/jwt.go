@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"errors"
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/hazaloolu/openUp_backend/internal/model"
 )
 
-var secretKey = GenerateSecureKey()
+var jwtKey = []byte(os.Getenv("JWT_SECRET"))
 
 type Claims struct {
 	Username string `json:"username"`
@@ -16,29 +16,28 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateJwt(user *model.User, secretKey string) (string, error) {
+// Generate jwt with specified username
+
+func GenerateJwt(username string, userID uint) (string, error) {
+	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		Username: user.Username,
-		UserID:   user.ID,
+		Username: username,
+		UserID:   userID,
 		RegisteredClaims: jwt.RegisteredClaims{
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(secretKey))
-	if err != nil {
-		return "", err
-	}
-	return tokenString, nil
+	fmt.Println("Generated Token:", token)
+	return token.SignedString(jwtKey)
 }
 
 func ValidateJwt(tokenString string) (*Claims, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 
-		return []byte(secretKey), nil
+		return jwtKey, nil
 
 	})
 
@@ -47,9 +46,9 @@ func ValidateJwt(tokenString string) (*Claims, error) {
 	}
 
 	if !token.Valid {
-		return nil, errors.New("invalid token")
-
+		return nil, err
 	}
 
 	return claims, nil
+
 }

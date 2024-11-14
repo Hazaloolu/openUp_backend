@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -16,6 +17,10 @@ func InitDB() {
 
 	dsn := os.Getenv("DATABASE_URL")
 
+	// dsn := "postgresql://hazaloolu:RPmZ33taUstHSupGy1sxSA1LFPTgZv0x@dpg-cspm8qt2ng1s73d3f2n0-a.oregon-postgres.render.com/openup_db"
+
+	fmt.Print(dsn)
+
 	var err error
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -29,6 +34,7 @@ func InitDB() {
 	log.Println("Database connection established succesfully")
 
 	err = DB.AutoMigrate(&model.User{}, &model.Post{})
+	log.Println("migration completed")
 
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)

@@ -69,9 +69,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var secretKey = auth.GenerateSecureKey()
+	// var secretKey = auth.GenerateSecureKey()
 
-	token, err := auth.GenerateJwt(&user, secretKey)
+	token, err := auth.GenerateJwt(user.Username, user.ID)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate token"})
