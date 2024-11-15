@@ -34,8 +34,8 @@ func Create_post(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Post created successfully",
 		"post": map[string]interface{}{
-			"id":         createdPost.ID,
-			"title":      createdPost.Title,
+			"id": createdPost.ID,
+			// "title":      createdPost.Title,
 			"content":    createdPost.Content,
 			"author_id":  createdPost.AuthorID,
 			"username":   createdPost.Author.Username, // Include the username of the user
