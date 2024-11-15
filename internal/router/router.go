@@ -17,7 +17,9 @@ func SetUpRouter() *gin.Engine {
 	autheticated.Use(middleware.AuthMiddleware())
 	{
 		autheticated.POST("create-post", handler.Create_post)
+		autheticated.POST("Feed", handler.GetAllPosts)
 	}
 
 	return r
+
 }
