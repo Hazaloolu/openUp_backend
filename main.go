@@ -15,20 +15,20 @@ import (
 
 // load env
 
-func LoadEnv() error {
-	if err := godotenv.Load("config/.env"); err != nil {
-		return err
-	}
-	return nil
-}
+// func LoadEnv() error {
+// 	if err := godotenv.Load("config/.env"); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func main() {
 
-	err := LoadEnv()
+	// err := LoadEnv()
 
-	if err != nil {
-		log.Fatalf("Error loading env file : %v", err)
-	}
+	// if err != nil {
+	// 	log.Fatalf("Error loading env file : %v", err)
+	// }
 
 	storage.InitDB()
 	r := router.SetUpRouter()
