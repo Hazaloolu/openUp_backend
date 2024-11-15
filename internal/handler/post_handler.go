@@ -54,7 +54,7 @@ func GetAllPosts(c *gin.Context) {
 
 	offset := (page - 1) * limit
 
-	if err := storage.DB.Offset(offset).Limit(limit).Preload("User").Find(&posts).Error; err != nil {
+	if err := storage.DB.Offset(offset).Limit(limit).Preload("Author").Find(&posts).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve posts"})
 		return
 	}
